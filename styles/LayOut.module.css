@@ -1,0 +1,25 @@
+.logo {
+  float: left;
+  /* margin: 16px 24px 16px 0; */
+  color: white;
+  text-decoration: none;
+}
+
+.logo:hover {
+  color: orange;
+  cursor: pointer;
+}
+.site_layout_background {
+  background: #fff;
+}
+
+.menu_items {
+  float: right;
+  display: flex;
+  justify-content: flex-end;
+  width: 20%;
+}
+
+.menu_item {
+  text-align: center;
+}
