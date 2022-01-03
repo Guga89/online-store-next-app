@@ -1,16 +1,20 @@
-import Head from "next/head";
-import "antd/dist/antd.css";
-import { Layout, Menu, Breadcrumb } from "antd";
-import classes from "../styles/LayOut.module.css";
-import { useSelector, useDispatch } from "react-redux";
-import { logIn, logOut } from "../redux/authSlice";
-import Link from "next/link";
-import { ShoppingCartOutlined } from "@ant-design/icons";
+import Head from 'next/head';
+import 'antd/dist/antd.css';
+import { Layout, Menu, Breadcrumb, Badge } from 'antd';
+import classes from '../styles/LayOut.module.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { logIn, logOut } from '../redux/authSlice';
+import Link from 'next/link';
+import { ShoppingCartOutlined } from '@ant-design/icons';
+import CartDrawer from './CartDrawer';
+import { useState } from 'react';
 
 const LayOut = ({ children }) => {
   const { Header, Content, Footer } = Layout;
 
   const { isAuthenticated } = useSelector((state) => state.auth);
+  const { cartItems, priceSum } = useSelector((state) => state.cart);
+
   const dispatch = useDispatch();
 
   const logInHandler = () => {
@@ -19,7 +23,17 @@ const LayOut = ({ children }) => {
   const logOutHandler = () => {
     dispatch(logOut());
   };
+  //=================Cart Drawer===============================
+  const [visible, setVisible] = useState(false);
 
+  const showDrawer = () => {
+    setVisible(true);
+  };
+
+  const onClose = () => {
+    setVisible(false);
+  };
+  //============================================================
   return (
     <>
       <Head>
@@ -28,9 +42,9 @@ const LayOut = ({ children }) => {
       <Layout>
         <Header
           style={{
-            position: "fixed",
+            position: 'fixed',
             zIndex: 1,
-            width: "100%",
+            width: '100%',
           }}
         >
           <Link href="/">
@@ -39,7 +53,7 @@ const LayOut = ({ children }) => {
           <Menu
             theme="dark"
             mode="horizontal"
-            defaultSelectedKeys={["1"]}
+            defaultSelectedKeys={['1']}
             className={classes.menu_items}
           >
             {!isAuthenticated && (
@@ -59,15 +73,21 @@ const LayOut = ({ children }) => {
             {isAuthenticated && (
               <Menu.Item
                 key="4"
-                // onClick={}
+                onClick={showDrawer}
                 className={classes.menu_item}
               >
-                <ShoppingCartOutlined
-                  style={{
-                    color: "white",
-                    fontSize: "20px",
-                  }}
-                />
+                <Badge
+                  count={cartItems.length}
+                  size="small"
+                  style={{ backgroundColor: 'darkorange' }}
+                >
+                  <ShoppingCartOutlined
+                    style={{
+                      color: 'white',
+                      fontSize: '20px',
+                    }}
+                  />
+                </Badge>
               </Menu.Item>
             )}
             {isAuthenticated && (
@@ -82,22 +102,26 @@ const LayOut = ({ children }) => {
           </Menu>
         </Header>
         <Content
-          className="site-layout" //prettier-ignore
-          style={{ padding: "0 50px", marginTop: 64 }}
+          className={classes.site_layout} //prettier-ignore
+          // style={{ padding: '0 50px', marginTop: 64 }}
         >
-          <Breadcrumb style={{ margin: "16px 0" }}>
-            <Breadcrumb.Item>Home</Breadcrumb.Item>
-            <Breadcrumb.Item>Products</Breadcrumb.Item>
-            {/* <Breadcrumb.Item>App</Breadcrumb.Item> */}
+          <Breadcrumb style={{ margin: '16px 0' }}>
+            {/* <Breadcrumb.Item>Home</Breadcrumb.Item> */}
+            {/* <Breadcrumb.Item>Products</Breadcrumb.Item>
+            <Breadcrumb.Item>App</Breadcrumb.Item> */}
           </Breadcrumb>
           <div
             className={classes.site_layout_background} //prettier-ignore
-            style={{ padding: 24, minHeight: "80vh" }}
           >
             {children}
+            <CartDrawer
+              showDrawer={showDrawer}
+              onClose={onClose}
+              visible={visible}
+            />
           </div>
         </Content>
-        <Footer style={{ textAlign: "center" }}>
+        <Footer style={{ textAlign: 'center' }}>
           All rights reserved ©2021
         </Footer>
       </Layout>

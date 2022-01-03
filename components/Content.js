@@ -1,13 +1,13 @@
-import data from "../utils/data";
-import { Row, Col } from "antd";
-import ProductCard from "./ProductCard";
-import Link from "next/link";
+// import data from "../utils/data";
+import { Row, Col } from 'antd';
+import ProductCard from './ProductCard';
 
-const Products = () => {
+export default function Products(props) {
+  const { products } = props;
   return (
     <>
       <Row gutter={[20, 20]}>
-        {data.products.map((item) => {
+        {products.map((item) => {
           return (
             <Col key={item.name} lg={6} xs={24} md={8} sm={12}>
               <ProductCard
@@ -16,6 +16,8 @@ const Products = () => {
                 price={item.price}
                 description={item.description}
                 slug={item.slug}
+                _id={item._id}
+                countInStock={item.countInStock}
               />
             </Col>
           );
@@ -23,6 +25,4 @@ const Products = () => {
       </Row>
     </>
   );
-};
-
-export default Products;
+}

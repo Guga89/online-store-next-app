@@ -9,8 +9,24 @@
   color: orange;
   cursor: pointer;
 }
+
+.site_layout {
+  padding: 0 50px;
+  margin-top: 64px;
+}
+
+@media (max-width: 800px) {
+  .site_layout {
+    padding: 0;
+    margin-top: 50px;
+  }
+}
 .site_layout_background {
   background: #fff;
+  padding: 24px;
+  min-height: 85vh;
+  max-width: 1800px;
+  margin: 0 auto;
 }
 
 .menu_items {
