@@ -8,11 +8,14 @@ import {
   clearAll,
 } from '../redux/cartSlice';
 import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
 
 const CartDrawer = (props) => {
   const { cartItems, priceSum } = useSelector((state) => state.cart);
 
   const dispatch = useDispatch();
+  const router = useRouter();
+
   const onAddCount = (item) => {
     dispatch(cartAddItem(item));
   };
@@ -21,9 +24,14 @@ const CartDrawer = (props) => {
   };
   const onClearAll = () => {
     dispatch(clearAll());
+    props.onClose();
   };
   const onRemoveItem = (item) => {
     dispatch(cartRemoveItem(item));
+  };
+
+  const onCheckoutHandler = () => {
+    router.push('/shipping');
   };
 
   return (
@@ -47,6 +55,7 @@ const CartDrawer = (props) => {
                 block
                 type="primary"
                 disabled={cartItems.length <= 0 ? true : false}
+                onClick={onCheckoutHandler}
               >
                 CHECK OUT
               </Button>

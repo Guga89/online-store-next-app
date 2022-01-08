@@ -1,6 +1,5 @@
-import { useRouter } from 'next/router';
 import LayOut from '../../components/LayOut';
-import data from '../../utils/data';
+// import data from '../../utils/data';
 import { Breadcrumb, Col, Row, Image, Card, Divider, Button } from 'antd';
 import { ShoppingCartOutlined, HeartOutlined } from '@ant-design/icons';
 import Link from 'next/link';
@@ -33,9 +32,9 @@ const ProductDetails = (props) => {
         <div>
           <Row gutter={[8, 8]}>
             <Col md={14} sm={24}>
-              <Image src={product.image} />
+              <Image src={product.image} alt="product image" />
             </Col>
-            <Col md={10} sm={24}>
+            <Col md={10} xs={24}>
               <Card
                 title={<h1>{product.name}</h1>}
                 extra={<h1>${product.price} USD</h1>}

@@ -3,26 +3,21 @@ import 'antd/dist/antd.css';
 import { Layout, Menu, Breadcrumb, Badge } from 'antd';
 import classes from '../styles/LayOut.module.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { logIn, logOut } from '../redux/authSlice';
+import { logOut } from '../redux/authSlice';
 import Link from 'next/link';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import CartDrawer from './CartDrawer';
 import { useState } from 'react';
+import LoginModal from './LoginModal';
 
 const LayOut = ({ children }) => {
   const { Header, Content, Footer } = Layout;
 
   const { isAuthenticated } = useSelector((state) => state.auth);
-  const { cartItems, priceSum } = useSelector((state) => state.cart);
+  const { cartItems } = useSelector((state) => state.cart);
 
   const dispatch = useDispatch();
 
-  const logInHandler = () => {
-    dispatch(logIn());
-  };
-  const logOutHandler = () => {
-    dispatch(logOut());
-  };
   //=================Cart Drawer===============================
   const [visible, setVisible] = useState(false);
 
@@ -34,6 +29,26 @@ const LayOut = ({ children }) => {
     setVisible(false);
   };
   //============================================================
+
+  //================== Login Modal ==============================
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const onShowModal = () => {
+    setModalVisible(true);
+  };
+
+  const onHideModal = () => {
+    setModalVisible(false);
+  };
+
+  const logInHandler = () => {
+    // dispatch(logIn());
+    setModalVisible(true);
+  };
+  const logOutHandler = () => {
+    dispatch(logOut());
+  };
+  //=============================================================
   return (
     <>
       <Head>
@@ -47,7 +62,7 @@ const LayOut = ({ children }) => {
             width: '100%',
           }}
         >
-          <Link href="/">
+          <Link href="/" passHref>
             <div className={classes.logo}>Online Store</div>
           </Link>
           <Menu
@@ -70,26 +85,24 @@ const LayOut = ({ children }) => {
                 Log in
               </Menu.Item>
             )}
-            {isAuthenticated && (
-              <Menu.Item
-                key="4"
-                onClick={showDrawer}
-                className={classes.menu_item}
+            <Menu.Item
+              key="4"
+              onClick={showDrawer}
+              className={classes.menu_item}
+            >
+              <Badge
+                count={cartItems.length}
+                size="small"
+                style={{ backgroundColor: 'darkorange' }}
               >
-                <Badge
-                  count={cartItems.length}
-                  size="small"
-                  style={{ backgroundColor: 'darkorange' }}
-                >
-                  <ShoppingCartOutlined
-                    style={{
-                      color: 'white',
-                      fontSize: '20px',
-                    }}
-                  />
-                </Badge>
-              </Menu.Item>
-            )}
+                <ShoppingCartOutlined
+                  style={{
+                    color: 'white',
+                    fontSize: '20px',
+                  }}
+                />
+              </Badge>
+            </Menu.Item>
             {isAuthenticated && (
               <Menu.Item
                 key="3"
@@ -118,6 +131,11 @@ const LayOut = ({ children }) => {
               showDrawer={showDrawer}
               onClose={onClose}
               visible={visible}
+            />
+            <LoginModal
+              showModal={onShowModal}
+              hideModal={onHideModal}
+              visible={modalVisible}
             />
           </div>
         </Content>

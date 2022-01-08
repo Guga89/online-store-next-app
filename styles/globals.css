@@ -14,3 +14,22 @@ a {
 * {
   box-sizing: border-box;
 }
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: white;
+  box-shadow: inset 2px 2px 5px 2px lightgray;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(137, 138, 139);
+  box-shadow: inset 2px 2px 5px 2px rgb(232, 225, 225);
+  border-radius: 100vw;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #5b5b5c;
+}
