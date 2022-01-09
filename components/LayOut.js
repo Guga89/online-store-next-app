@@ -5,15 +5,17 @@ import classes from '../styles/LayOut.module.css';
 import { useSelector, useDispatch } from 'react-redux';
 import { logOut } from '../redux/authSlice';
 import Link from 'next/link';
-import { ShoppingCartOutlined } from '@ant-design/icons';
+import { ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 import CartDrawer from './CartDrawer';
 import { useState } from 'react';
 import LoginModal from './LoginModal';
+import { clearAll } from '../redux/cartSlice';
+import SubMenu from 'antd/lib/menu/SubMenu';
 
 const LayOut = ({ children }) => {
   const { Header, Content, Footer } = Layout;
 
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const userInfo = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.cart);
 
   const dispatch = useDispatch();
@@ -42,11 +44,11 @@ const LayOut = ({ children }) => {
   };
 
   const logInHandler = () => {
-    // dispatch(logIn());
     setModalVisible(true);
   };
   const logOutHandler = () => {
     dispatch(logOut());
+    dispatch(clearAll());
   };
   //=============================================================
   return (
@@ -68,25 +70,11 @@ const LayOut = ({ children }) => {
           <Menu
             theme="dark"
             mode="horizontal"
-            defaultSelectedKeys={['1']}
+            // defaultSelectedKeys={['1']}
             className={classes.menu_items}
           >
-            {!isAuthenticated && (
-              <Menu.Item key="1" className={classes.menu_item}>
-                Sign up
-              </Menu.Item>
-            )}
-            {!isAuthenticated && (
-              <Menu.Item
-                key="2"
-                onClick={logInHandler}
-                className={classes.menu_item}
-              >
-                Log in
-              </Menu.Item>
-            )}
             <Menu.Item
-              key="4"
+              key="1"
               onClick={showDrawer}
               className={classes.menu_item}
             >
@@ -103,13 +91,43 @@ const LayOut = ({ children }) => {
                 />
               </Badge>
             </Menu.Item>
-            {isAuthenticated && (
+            {!userInfo.isAuthenticated && (
+              <Menu.Item key="2" className={classes.menu_item}>
+                Sign up
+              </Menu.Item>
+            )}
+            {userInfo.isAuthenticated ? (
+              <SubMenu key="3" icon={<UserOutlined />} title={userInfo.name}>
+                <Menu.Item
+                  key="sub1"
+                  onClick={() => {}}
+                  className={classes.menu_item}
+                >
+                  Profile
+                </Menu.Item>
+                <Menu.Item
+                  key="sub2"
+                  onClick={() => {}}
+                  className={classes.menu_item}
+                >
+                  My Account
+                </Menu.Item>
+                <Menu.Divider />
+                <Menu.Item
+                  key="sub3"
+                  onClick={logOutHandler}
+                  className={classes.menu_item}
+                >
+                  Sign out
+                </Menu.Item>
+              </SubMenu>
+            ) : (
               <Menu.Item
-                key="3"
-                onClick={logOutHandler}
+                key="4"
+                onClick={logInHandler}
                 className={classes.menu_item}
               >
-                Sign out
+                Log in
               </Menu.Item>
             )}
           </Menu>

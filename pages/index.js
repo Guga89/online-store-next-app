@@ -5,12 +5,14 @@ import db from '../utils/db';
 import Product from '../models/Product';
 
 function Home(props) {
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const userInfo = useSelector((state) => state.auth);
 
   return (
     <LayOut>
-      {!isAuthenticated && <h1>Not Logged In</h1>}
-      {isAuthenticated && <h2>User is Logged In! Welcome to your component</h2>}
+      {!userInfo.isAuthenticated && <h1>Not Logged In</h1>}
+      {userInfo.isAuthenticated && (
+        <h2>User is Logged In! Welcome to your component</h2>
+      )}
       <Products products={props.products} />
     </LayOut>
   );

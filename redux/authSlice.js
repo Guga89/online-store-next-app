@@ -1,18 +1,27 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
+import Cookies from 'js-cookie';
 
-const initialState = { isAuthenticated: false };
+const initialState = Cookies.get('userInfo')
+  ? JSON.parse(Cookies.get('userInfo'))
+  : { isAuthenticated: false };
 
 export const authSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState,
   reducers: {
-    logIn: (state) => {
+    logIn: (state, actions) => {
       state.isAuthenticated = true;
-      console.log("Logged In", state.isAuthenticated);
+      state = { ...state, ...actions.payload };
+      Cookies.set('userInfo', JSON.stringify(state));
+      console.log('Logged In', state);
     },
     logOut: (state) => {
       state.isAuthenticated = false;
-      console.log("Logged Out!", state.isAuthenticated);
+      state = { isAuthenticated: false };
+      Cookies.set('userInfo', JSON.stringify({}));
+      Cookies.set('cartItems', JSON.stringify([]));
+      Cookies.set('priceSum', JSON.stringify(0));
+      console.log('Logged Out!', state);
     },
   },
 });

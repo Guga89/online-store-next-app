@@ -9,7 +9,7 @@ const handler = nc();
 handler.post(async (req, res) => {
   await db.connect();
   const user = await User.findOne({ email: req.body.email });
-  console.log(req.body.password, user.password);
+  //   console.log(req.body.password, user.password);
 
   if (user && bcrypt.compareSync(req.body.password, user.password)) {
     const token = signToken(user);

@@ -3,11 +3,15 @@ import { Modal } from 'antd';
 import { Form, Input, Button, Checkbox } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { logIn } from '../redux/authSlice';
 
 const LoginModal = (props) => {
   // const [confirmLoading, setConfirmLoading] = useState(false);
   // const [email, setEmail] = useState('');
   // const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
+  // const userInfo = useSelector((state) => state.auth);
 
   const handleCancel = () => {
     props.hideModal(false); //should be true but for now it is reversed due to passed state requires false value to hide
@@ -24,8 +28,9 @@ const LoginModal = (props) => {
   const onFinish = async (values) => {
     try {
       const { data } = await axios.post('/api/users/login', values);
+      dispatch(logIn(data));
       alert('successfully loged in!');
-      console.log(data);
+      handleCancel();
     } catch (error) {
       alert(error.response.data ? error.response.data.message : error.message);
     }
