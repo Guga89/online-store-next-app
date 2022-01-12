@@ -64,26 +64,12 @@ const Register = () => {
         password: values.password,
       });
       dispatch(logIn(data));
-      //   alert('successfully registered and loged in!');
       openNotification();
       router.back();
     } catch (error) {
       alert(error.response.data ? error.response.data.message : error.message);
     }
   };
-
-  //   const prefixSelector = (
-  //     <Form.Item name="prefix" noStyle>
-  //       <Select
-  //         style={{
-  //           width: 70,
-  //         }}
-  //       >
-  //         <Option value="86">+86</Option>
-  //         <Option value="87">+87</Option>
-  //       </Select>
-  //     </Form.Item>
-  //   );
 
   return (
     <LayOut>
