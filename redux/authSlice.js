@@ -11,6 +11,7 @@ export const authSlice = createSlice({
   reducers: {
     logIn: (state, actions) => {
       state.isAuthenticated = true;
+      state.name = actions.payload.name;
       state = { ...state, ...actions.payload };
       Cookies.set('userInfo', JSON.stringify(state));
       console.log('Logged In', state);

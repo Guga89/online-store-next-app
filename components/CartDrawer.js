@@ -12,6 +12,7 @@ import { useRouter } from 'next/router';
 
 const CartDrawer = (props) => {
   const { cartItems, priceSum } = useSelector((state) => state.cart);
+  const userInfo = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
   const router = useRouter();
@@ -25,13 +26,20 @@ const CartDrawer = (props) => {
   const onClearAll = () => {
     dispatch(clearAll());
     props.onClose();
+    const id = router.query._id;
+    id ? router.push(`/product/${id}`) : router.push('/');
   };
   const onRemoveItem = (item) => {
     dispatch(cartRemoveItem(item));
   };
 
   const onCheckoutHandler = () => {
-    router.push('/shipping');
+    if (userInfo.isAuthenticated) {
+      router.push('/shipping');
+    } else {
+      props.onClose();
+      props.showModal();
+    }
   };
 
   return (
