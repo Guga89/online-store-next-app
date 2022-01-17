@@ -10,7 +10,7 @@ import Link from 'next/link';
 
 const NavMenu = (props) => {
   const userInfo = useSelector((state) => state.auth);
-  console.log(userInfo);
+  // console.log(userInfo);
 
   const dispatch = useDispatch();
   const router = useRouter();

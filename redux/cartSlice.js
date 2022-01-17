@@ -8,6 +8,9 @@ const initialState = {
   priceSum: Cookies.get('priceSum')
     ? Number(JSON.parse(Cookies.get('priceSum')))
     : 0,
+  shippingAddress: Cookies.get('shippingAddress')
+    ? JSON.parse(Cookies.get('shippingAddress'))
+    : {},
 };
 
 export const cartSlice = createSlice({
@@ -98,11 +101,23 @@ export const cartSlice = createSlice({
       state.cartItems = [];
       state.priceSum = 0;
     },
+
+    //==============================ADDING SHIPPING ADDRESS===========================
+    saveShippingAddress: (state, actions) => {
+      state.shippingAddress = { ...actions.payload };
+      Cookies.set('shippingAddress', JSON.stringify(state.shippingAddress));
+      // console.log('shippingAddress', state.shippingAddress);
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { cartAddItem, cartRemoveItem, cartReduceItemCount, clearAll } =
-  cartSlice.actions;
+export const {
+  cartAddItem,
+  cartRemoveItem,
+  cartReduceItemCount,
+  clearAll,
+  saveShippingAddress,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;

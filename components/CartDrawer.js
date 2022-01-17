@@ -1,5 +1,5 @@
 // import 'antd/dist/antd.css';
-import { Drawer, Button, List, Image, Popover } from 'antd';
+import { Drawer, Button, List, Image, Popover, notification } from 'antd';
 import { useSelector } from 'react-redux';
 import {
   cartAddItem,
@@ -33,11 +33,23 @@ const CartDrawer = (props) => {
     dispatch(cartRemoveItem(item));
   };
 
+  //========================== Popup Notifications ====================
+  const openNotification = () => {
+    notification.open({
+      message: 'Oops need to login first...',
+      description: 'Please sign in to proceed with purchase!',
+      onClick: () => {
+        console.log('Notification Clicked!');
+      },
+    });
+  };
+
   const onCheckoutHandler = () => {
     if (userInfo.isAuthenticated) {
       router.push('/shipping');
     } else {
       props.onClose();
+      openNotification();
       props.showModal();
     }
   };

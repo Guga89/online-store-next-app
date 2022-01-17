@@ -16,10 +16,12 @@ import {
   List,
   Image,
   Popover,
+  Radio,
 } from 'antd';
+import { useRouter } from 'next/router';
 
 // import axios from 'axios';
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 import LayOut from '../components/LayOut';
 import {
@@ -48,6 +50,10 @@ const ShippingPage = () => {
     dispatch(cartRemoveItem(item));
   };
 
+  const submitHandler = (method) => {
+    // dispatch(savePaymentMethod(method));
+    router.push('order');
+  };
   //========================== Popup Notifications ====================
   const openNotification = () => {
     notification.open({
@@ -62,27 +68,6 @@ const ShippingPage = () => {
 
   const { Step } = Steps;
   //===============================  FORM ===============================
-
-  const onFinish = async (values) => {
-    // console.log(values);
-    try {
-      //   const { data } = await axios.post('/api/shipping', {
-      //     fullname: values.fullname,
-      //     address: values.address,
-      //     city: values.city,
-      //     postalCode: values.postalCode,
-      //     coutry: values.coutry,
-      //     phone: values.phone,
-      //   });
-      //   //   alert('successfully registered and loged in!');
-      //   console.log(data);
-      openNotification();
-      dispatch(saveShippingAddress(values));
-      router.push('/payment');
-    } catch (error) {
-      alert(error.response.data ? error.response.data.message : error.message);
-    }
-  };
 
   return (
     <LayOut>
@@ -100,7 +85,7 @@ const ShippingPage = () => {
           <Steps labelPlacement="vertical">
             <Step status="finish" title="Login" icon={<UserOutlined />} />
             <Step
-              status="wait"
+              status="finish"
               title="Shipping addres"
               icon={<SolutionOutlined />}
             />
@@ -110,86 +95,32 @@ const ShippingPage = () => {
 
           <Divider style={{ margin: '30px auto' }}>Shipping address</Divider>
 
-          <Form
-            name="complex-form"
-            onFinish={onFinish}
-            labelCol={{ span: 8 }}
-            wrapperCol={{ span: 16 }}
+          <Radio.Group
+            defaultValue="cash"
+            buttonStyle="solid"
+            style={{ display: 'flex', justifyContent: 'space-evenly' }}
           >
-            <Form.Item label="Your full name">
-              <Form.Item
-                name="fullname"
-                noStyle
-                rules={[{ required: true, message: 'Username is required' }]}
-              >
-                <Input
-                  style={{ width: '100%' }}
-                  placeholder="Please enter your full name"
-                  value={shippingAddress.fullname}
-                />
-              </Form.Item>
-            </Form.Item>
-            <Form.Item label="Address">
-              <Input.Group compact>
-                <Form.Item
-                  name="address"
-                  noStyle
-                  rules={[{ required: true, message: 'Address is required' }]}
-                >
-                  <Input
-                    style={{ width: '100%' }}
-                    placeholder="Input your address"
-                  />
-                </Form.Item>
-              </Input.Group>
-            </Form.Item>
-            <Form.Item
-              label="Country & Postal Code"
-              style={{ marginBottom: 0 }}
+            <Radio.Button
+              value="cash"
+              style={{ width: '30%', textAlign: 'center' }}
             >
-              <Form.Item
-                name="country"
-                rules={[{ required: true, message: 'Country is required' }]}
-                style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
-              >
-                <Input placeholder="Country" />
-              </Form.Item>
-              <Form.Item
-                name="postalCode"
-                rules={[{ required: true, message: 'Postal code is required' }]}
-                style={{
-                  display: 'inline-block',
-                  width: 'calc(50% - 8px)',
-                  margin: '0 8px',
-                }}
-              >
-                <Input placeholder="Postal Code" />
-              </Form.Item>
-            </Form.Item>
-            <Form.Item label="Phone number">
-              <Form.Item
-                name="phone"
-                noStyle
-                rules={[
-                  {
-                    required: true,
-                    message: 'Phone number is required',
-                  },
-                ]}
-              >
-                <Input
-                  style={{ width: '100%' }}
-                  placeholder="Please input your phone number"
-                />
-              </Form.Item>
-            </Form.Item>
-            <Form.Item label=" " colon={false}>
-              <Button type="primary" htmlType="submit">
-                Confirm address
-              </Button>
-              {/* <Button disabled>Address confirmed</Button> */}
-            </Form.Item>
-          </Form>
+              Cash on delivery
+            </Radio.Button>
+            <Radio.Button
+              value="wechat"
+              style={{ width: '30%', textAlign: 'center' }}
+            >
+              WeChat Pay
+            </Radio.Button>
+            <Radio.Button
+              value="alipay"
+              style={{ width: '30%', textAlign: 'center' }}
+            >
+              Alipay
+            </Radio.Button>
+          </Radio.Group>
+          <Divider></Divider>
+          <Button onClick={submitHandler}>Proceed to order page</Button>
         </Col>
 
         <Col xs={24} md={12}>

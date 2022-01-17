@@ -8,9 +8,6 @@ import { logIn } from '../redux/authSlice';
 import { useRouter } from 'next/router';
 
 const LoginModal = (props) => {
-  // const [confirmLoading, setConfirmLoading] = useState(false);
-  // const [email, setEmail] = useState('');
-  // const [password, setPassword] = useState('');
   const dispatch = useDispatch();
   // const userInfo = useSelector((state) => state.auth);
   const router = useRouter();
@@ -19,13 +16,6 @@ const LoginModal = (props) => {
     props.hideModal(false); //should be true but for now it is reversed due to passed state requires false value to hide
   };
 
-  // const handleOk = () => {
-  //   setConfirmLoading(true);
-  //   setTimeout(() => {
-  //     props.hideModal(false);
-  //     setConfirmLoading(false);
-  //   }, 2000);
-  // };
   const openNotification = () => {
     notification.open({
       message: 'Successfully signed in!',
