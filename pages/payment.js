@@ -4,70 +4,24 @@ import {
   SolutionOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import {
-  Col,
-  Divider,
-  Input,
-  notification,
-  Row,
-  Steps,
-  Form,
-  Button,
-  List,
-  Image,
-  Popover,
-  Radio,
-} from 'antd';
+import { Col, Divider, Row, Steps, Form, Button, Radio } from 'antd';
 import { useRouter } from 'next/router';
-
-// import axios from 'axios';
-// import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
+import CartItemsList from '../components/CartItemsList';
 import LayOut from '../components/LayOut';
-import {
-  cartAddItem,
-  cartReduceItemCount,
-  cartRemoveItem,
-  saveShippingAddress,
-} from '../redux/cartSlice';
+import { savePaymentMethod } from '../redux/cartSlice';
 
 const ShippingPage = () => {
   const router = useRouter();
-  const { cartItems, priceSum, shippingAddress } = useSelector(
-    (state) => state.cart
-  );
+  const { paymentMethod } = useSelector((state) => state.cart);
 
   const dispatch = useDispatch();
 
-  const onAddCount = (item) => {
-    dispatch(cartAddItem(item));
-  };
-  const onReduceCount = (item) => {
-    dispatch(cartReduceItemCount(item));
-  };
-
-  const onRemoveItem = (item) => {
-    dispatch(cartRemoveItem(item));
-  };
-
-  const submitHandler = (method) => {
-    // dispatch(savePaymentMethod(method));
+  const onFinish = (payment) => {
+    dispatch(savePaymentMethod(payment.method));
     router.push('order');
   };
-  //========================== Popup Notifications ====================
-  const openNotification = () => {
-    notification.open({
-      message: 'Thank you for address verification!',
-      description:
-        'Please complete further payment steps so we can ship your items at the sooonest.',
-      onClick: () => {
-        console.log('Notification Clicked!');
-      },
-    });
-  };
-
   const { Step } = Steps;
-  //===============================  FORM ===============================
 
   return (
     <LayOut>
@@ -94,33 +48,42 @@ const ShippingPage = () => {
           </Steps>
 
           <Divider style={{ margin: '30px auto' }}>Shipping address</Divider>
+          <Form name="complex-form" onFinish={onFinish}>
+            <Form.Item name="method" noStyle>
+              <Radio.Group
+                defaultValue={paymentMethod || ''}
+                buttonStyle="solid"
+                style={{ display: 'flex', justifyContent: 'space-evenly' }}
+              >
+                <Radio.Button
+                  value="cash"
+                  style={{ width: '30%', textAlign: 'center' }}
+                >
+                  Cash on delivery
+                </Radio.Button>
+                <Radio.Button
+                  value="wechat"
+                  style={{ width: '30%', textAlign: 'center' }}
+                >
+                  WeChat Pay
+                </Radio.Button>
+                <Radio.Button
+                  value="alipay"
+                  style={{ width: '30%', textAlign: 'center' }}
+                >
+                  Alipay
+                </Radio.Button>
+              </Radio.Group>
+            </Form.Item>
 
-          <Radio.Group
-            defaultValue="cash"
-            buttonStyle="solid"
-            style={{ display: 'flex', justifyContent: 'space-evenly' }}
-          >
-            <Radio.Button
-              value="cash"
-              style={{ width: '30%', textAlign: 'center' }}
-            >
-              Cash on delivery
-            </Radio.Button>
-            <Radio.Button
-              value="wechat"
-              style={{ width: '30%', textAlign: 'center' }}
-            >
-              WeChat Pay
-            </Radio.Button>
-            <Radio.Button
-              value="alipay"
-              style={{ width: '30%', textAlign: 'center' }}
-            >
-              Alipay
-            </Radio.Button>
-          </Radio.Group>
-          <Divider></Divider>
-          <Button onClick={submitHandler}>Proceed to order page</Button>
+            <Form.Item label=" " colon={false}>
+              <Divider />
+              <Button block htmlType="submit">
+                Proceed to order page
+              </Button>
+              {/* <Button disabled>Address confirmed</Button> */}
+            </Form.Item>
+          </Form>
         </Col>
 
         <Col xs={24} md={12}>
@@ -129,95 +92,11 @@ const ShippingPage = () => {
               width: '100%',
               height: '70vh',
               padding: '10px 50px',
-              overflowY: 'scroll',
+              overflowY: 'auto',
               marginTop: '50px',
             }}
           >
-            <List
-              itemLayout="horizontal"
-              footer={
-                <div>
-                  <div
-                    style={{ display: 'flex', justifyContent: 'space-between' }}
-                  >
-                    <h3>TOTAL:</h3>
-                    <h3> ${priceSum} USD</h3>
-                  </div>
-                  <hr />
-                </div>
-              }
-              dataSource={cartItems}
-              renderItem={(item) => (
-                <List.Item style={{ justifyContent: 'space-between' }}>
-                  <Image
-                    src={item.image}
-                    width={100}
-                    height={100}
-                    alt={item.name}
-                  />
-                  <div
-                    style={{
-                      maxHeight: '100px',
-                      color: 'grey',
-                    }}
-                  >
-                    <h3 style={{ marginBottom: '0' }}>{item.name}</h3>
-                    <p style={{ marginBottom: '0' }}>
-                      Size: {item?.size || 'XL'}
-                    </p>
-                    <p style={{ marginBottom: '0' }}>${item.price} USD</p>
-                    <div className="item-quantity">
-                      <Button
-                        size="small"
-                        style={{ width: '25px', height: '25px' }}
-                        onClick={() => onReduceCount(item)}
-                      >
-                        -
-                      </Button>
-                      <div
-                        style={{
-                          width: '25px',
-                          height: '25px',
-                          display: 'inline-block',
-                          textAlign: 'center',
-                        }}
-                      >
-                        {item.quantity}
-                      </div>
-                      {item.quantity >= item.countInStock ? (
-                        <Popover
-                          title={`Only ${item.countInStock} items are available for now`}
-                        >
-                          <Button
-                            size="small"
-                            disabled
-                            style={{ width: '25px', height: '25px' }}
-                            onClick={() => onAddCount(item)}
-                          >
-                            +
-                          </Button>
-                        </Popover>
-                      ) : (
-                        <Button
-                          size="small"
-                          style={{ width: '25px', height: '25px' }}
-                          onClick={() => onAddCount(item)}
-                        >
-                          +
-                        </Button>
-                      )}
-                    </div>
-                  </div>
-                  <Button
-                    type="text"
-                    size="small"
-                    onClick={() => onRemoveItem(item)}
-                  >
-                    Remove
-                  </Button>
-                </List.Item>
-              )}
-            />
+            <CartItemsList />
           </div>
         </Col>
       </Row>

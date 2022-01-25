@@ -11,7 +11,9 @@ import { useDispatch } from 'react-redux';
 import { useRouter } from 'next/router';
 
 const CartDrawer = (props) => {
-  const { cartItems, priceSum } = useSelector((state) => state.cart);
+  const { cartItems, priceSum, shippingAddress, paymentMethod } = useSelector(
+    (state) => state.cart
+  );
   const userInfo = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
@@ -45,7 +47,15 @@ const CartDrawer = (props) => {
   };
 
   const onCheckoutHandler = () => {
+    console.log(shippingAddress, paymentMethod);
     if (userInfo.isAuthenticated) {
+      // if (shippingAddress && paymentMethod) {
+      //   router.push('/order');
+      // } else if (shippingAddress) {
+      //   router.push('/payment');
+      // } else {
+      //   router.push('/shipping');
+      // }
       router.push('/shipping');
     } else {
       props.onClose();

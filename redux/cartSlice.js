@@ -11,6 +11,9 @@ const initialState = {
   shippingAddress: Cookies.get('shippingAddress')
     ? JSON.parse(Cookies.get('shippingAddress'))
     : {},
+  paymentMethod: Cookies.get('paymentMethod')
+    ? JSON.parse(Cookies.get('paymentMethod'))
+    : '',
 };
 
 export const cartSlice = createSlice({
@@ -102,10 +105,15 @@ export const cartSlice = createSlice({
       state.priceSum = 0;
     },
 
-    //==============================ADDING SHIPPING ADDRESS===========================
+    //==============================ADDING SHIPPING ADDRESS and PAYMENT===========================
     saveShippingAddress: (state, actions) => {
       state.shippingAddress = { ...actions.payload };
       Cookies.set('shippingAddress', JSON.stringify(state.shippingAddress));
+      // console.log('shippingAddress', state.shippingAddress);
+    },
+    savePaymentMethod: (state, actions) => {
+      state.paymentMethod = actions.payload;
+      Cookies.set('paymentMethod', JSON.stringify(state.paymentMethod));
       // console.log('shippingAddress', state.shippingAddress);
     },
   },
@@ -118,6 +126,7 @@ export const {
   cartReduceItemCount,
   clearAll,
   saveShippingAddress,
+  savePaymentMethod,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

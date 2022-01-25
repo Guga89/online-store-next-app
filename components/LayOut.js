@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import 'antd/dist/antd.css';
-import { Layout, Breadcrumb } from 'antd';
+import { Layout } from 'antd';
 import classes from '../styles/LayOut.module.css';
 import Link from 'next/link';
 import CartDrawer from './CartDrawer';
@@ -57,11 +57,6 @@ const LayOut = ({ children }) => {
           className={classes.site_layout} //prettier-ignore
           // style={{ padding: '0 50px', marginTop: 64 }}
         >
-          <Breadcrumb style={{ margin: '16px 0' }}>
-            {/* <Breadcrumb.Item>Home</Breadcrumb.Item> */}
-            {/* <Breadcrumb.Item>Products</Breadcrumb.Item>
-            <Breadcrumb.Item>App</Breadcrumb.Item> */}
-          </Breadcrumb>
           <div
             className={classes.site_layout_background} //prettier-ignore
           >

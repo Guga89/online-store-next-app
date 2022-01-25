@@ -9,10 +9,6 @@ function Home(props) {
 
   return (
     <LayOut>
-      {!userInfo.isAuthenticated && <h1>Not Logged In</h1>}
-      {userInfo.isAuthenticated && (
-        <h2>User is Logged In! Welcome to your component</h2>
-      )}
       <Products products={props.products} />
     </LayOut>
   );
