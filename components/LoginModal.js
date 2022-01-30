@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { logIn } from '../redux/authSlice';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 const LoginModal = (props) => {
   const dispatch = useDispatch();
@@ -47,7 +48,7 @@ const LoginModal = (props) => {
       footer={
         <div className="modalFooter" style={{ textAlign: 'center' }}>
           <span style={{ marginLeft: '10px' }}>
-            Or <a href="/register">register now!</a>
+            Or <Link href="/register">register now!</Link>
           </span>
         </div>
       }

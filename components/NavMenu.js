@@ -23,6 +23,10 @@ const NavMenu = (props) => {
     router.push('/');
   };
 
+  const loginHandler = () => {
+    router.push('/login');
+  };
+
   return (
     <Menu
       theme="dark"
@@ -81,11 +85,7 @@ const NavMenu = (props) => {
           </Menu.Item>
         </SubMenu>
       ) : (
-        <Menu.Item
-          key="4"
-          onClick={props.onShowModal}
-          className={classes.menu_item}
-        >
+        <Menu.Item key="4" onClick={loginHandler} className={classes.menu_item}>
           Log in
         </Menu.Item>
       )}

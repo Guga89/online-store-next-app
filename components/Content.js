@@ -9,7 +9,7 @@ export default function Products(props) {
       <Row gutter={[20, 20]}>
         {products.map((item) => {
           return (
-            <Col key={item.name} lg={6} xs={24} md={8} sm={12}>
+            <Col key={item._id} lg={6} xs={24} md={8} sm={12}>
               <ProductCard
                 name={item.name}
                 image={item.image}

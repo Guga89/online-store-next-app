@@ -12,6 +12,7 @@ export const authSlice = createSlice({
     logIn: (state, actions) => {
       state.isAuthenticated = true;
       state.name = actions.payload.name;
+      state.token = actions.payload.token;
       state = { ...state, ...actions.payload };
       Cookies.set('userInfo', JSON.stringify(state));
       console.log('Logged In', state);
@@ -21,6 +22,8 @@ export const authSlice = createSlice({
       state = { isAuthenticated: false };
       Cookies.set('userInfo', JSON.stringify({}));
       Cookies.set('cartItems', JSON.stringify([]));
+      Cookies.set('shippingAddress', JSON.stringify({}));
+      Cookies.set('paymentMethod', JSON.stringify(''));
       Cookies.set('priceSum', JSON.stringify(0));
       console.log('Logged Out!', state);
     },

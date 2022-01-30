@@ -13,7 +13,7 @@ import LayOut from '../components/LayOut';
 import { clearAll } from '../redux/cartSlice';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import Cookies from 'js-cookie';
+// import Cookies from 'js-cookie';
 
 const OrderPage = () => {
   const router = useRouter();
@@ -21,6 +21,7 @@ const OrderPage = () => {
     (state) => state.cart
   );
   const userInfo = useSelector((state) => state.auth);
+
   const [loading, setLoading] = useState(false);
   const { Step } = Steps;
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ const OrderPage = () => {
     if (cartItems.length === 0) {
       router.push('/');
     }
-  });
+  }, [cartItems, paymentMethod, router]);
 
   const submitOrderHandler = async () => {
     try {
@@ -47,14 +48,13 @@ const OrderPage = () => {
         },
         { headers: { authorization: `Bearer ${userInfo.token}` } }
       );
-      dispatch(clearAll());
-      Cookies.remove('cartItems');
       setLoading(false);
+      dispatch(clearAll());
       router.push(`/order/${data._id}`);
     } catch (error) {
       setLoading(false);
       const errMessage = getError(error);
-      console.log(errMessage);
+      console.log(errMessage, ' - order has not been submitted...');
     }
   };
 

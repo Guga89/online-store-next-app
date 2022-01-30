@@ -101,8 +101,12 @@ export const cartSlice = createSlice({
     clearAll: (state) => {
       Cookies.set('cartItems', JSON.stringify([]));
       Cookies.set('priceSum', JSON.stringify(0));
+      Cookies.set('shippingAddress', JSON.stringify({}));
+      Cookies.set('paymentMethod', JSON.stringify(''));
       state.cartItems = [];
       state.priceSum = 0;
+      // state.shippingAddress = {};
+      // state.paymentMethod = '';
     },
 
     //==============================ADDING SHIPPING ADDRESS and PAYMENT===========================
