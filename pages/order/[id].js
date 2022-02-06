@@ -4,7 +4,7 @@ import {
   SolutionOutlined,
   UserOutlined,
 } from '@ant-design/icons';
-import { Col, Divider, Row, Steps, Button, Spin, Image } from 'antd';
+import { Col, Divider, Row, Steps, Spin, Image } from 'antd';
 import { useRouter } from 'next/router';
 import { getError } from '../../utils/error';
 import { useSelector } from 'react-redux';
@@ -20,7 +20,7 @@ function reducer(state, action) {
     case 'FETCH_SUCCESS':
       return { ...state, loading: false, error: '', order: action.payload };
     case 'FETCH_FAIL':
-      return { ...state, loading: false, error: '' };
+      return { ...state, loading: false, error: action.payload };
     default:
       state;
   }
@@ -30,12 +30,20 @@ const OrderDetails = (props) => {
   const orderId = props.id;
   const router = useRouter();
 
+  // console.log(orderId);
+
   const userInfo = useSelector((state) => state.auth);
   const { Step } = Steps;
 
   const [{ loading, error, order }, dispatch] = useReducer(reducer, {
     loading: true,
-    order: {},
+    order: {
+      orderItems: [],
+      shippingAddress: {},
+      paymentMethod: '',
+      priceSum: 0,
+      isPaid: false,
+    },
     error: '',
   });
 
@@ -49,17 +57,15 @@ const OrderDetails = (props) => {
         const { data } = await axios.get(`/api/orders/${orderId}`, {
           headers: { authorization: `Bearer ${userInfo.token}` },
         });
-
-        console.log(data);
         dispatch({ type: 'FETCH_SUCCESS', payload: data });
-      } catch (error) {
-        dispatch({ type: 'FETCH_FAIL', payload: getError(error) });
+      } catch (err) {
+        dispatch({ type: 'FETCH_FAIL', payload: getError(err) });
       }
     };
     if (!order._id || (order._id && order._id !== orderId)) {
       fetchOrder();
     }
-  }, []);
+  }, [order]);
 
   return (
     <Spin spinning={loading} tip="Loading..." style={{ maxHeight: '100vh' }}>
